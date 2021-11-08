@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { MongoClient } = require("mongodb");
+const ObjectId = require("mongodb").ObjectId;
 require("dotenv").config();
 const app = express();
 
@@ -21,7 +22,24 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
-    console.log("Database Connect");
+
+    const database = client.db("tours_travels_bd");
+    const tourPackageCollection = database.collection("tour_packages");
+
+    //GET API (Fetch all tour packages from database)
+    app.get("/tourpackages", async (req, res) => {
+      const cursor = tourPackageCollection.find({});
+      const tour_packages = await cursor.toArray();
+      res.send(tour_packages);
+    });
+
+    // get single tour package
+    app.get("/tourpackages/:id", async (req, res) => {
+      const result = await tourPackageCollection
+        .find({ _id: ObjectId(req.params.id) })
+        .toArray();
+      res.send(result[0]);
+    });
   } finally {
     //   await client.close();
   }
