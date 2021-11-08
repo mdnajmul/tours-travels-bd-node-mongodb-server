@@ -70,6 +70,22 @@ async function run() {
       });
       res.send(result);
     });
+
+    // update status
+    app.put("/updateStatus/:id", (req, res) => {
+      const id = req.params.id;
+      const updatedStatus = "approved";
+      const filter = { _id: ObjectId(id) };
+      console.log(updatedStatus);
+      tourBookingCollection
+        .updateOne(filter, {
+          $set: { status: updatedStatus },
+        })
+        .then((result) => {
+          console.log(result);
+          res.send(result);
+        });
+    });
   } finally {
     //   await client.close();
   }
