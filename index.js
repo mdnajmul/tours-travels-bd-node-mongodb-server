@@ -25,6 +25,7 @@ async function run() {
 
     const database = client.db("tours_travels_bd");
     const tourPackageCollection = database.collection("tour_packages");
+    const tourBookingCollection = database.collection("orders");
 
     //GET API (Fetch all tour packages from database)
     app.get("/tourpackages", async (req, res) => {
@@ -39,6 +40,29 @@ async function run() {
         .find({ _id: ObjectId(req.params.id) })
         .toArray();
       res.send(result[0]);
+    });
+
+    // cofirm order
+    app.post("/confirmOrder", async (req, res) => {
+      const result = await tourBookingCollection.insertOne(req.body);
+      res.send(result);
+    });
+
+    // get all myOrders
+    app.get("/myOrders/:email", async (req, res) => {
+      const email = req.params.email;
+      const result = await tourBookingCollection
+        .find({ email: email })
+        .toArray();
+      res.send(result);
+    });
+
+    // delete order
+    app.delete("/delteOrder/:id", async (req, res) => {
+      const result = await tourBookingCollection.deleteOne({
+        _id: ObjectId(req.params.id),
+      });
+      res.send(result);
     });
   } finally {
     //   await client.close();
