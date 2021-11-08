@@ -57,6 +57,12 @@ async function run() {
       res.send(result);
     });
 
+    //get all order
+    app.get("/allOrders", async (req, res) => {
+      const result = await tourBookingCollection.find({}).toArray();
+      res.send(result);
+    });
+
     // delete order
     app.delete("/delteOrder/:id", async (req, res) => {
       const result = await tourBookingCollection.deleteOne({
