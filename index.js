@@ -42,6 +42,12 @@ async function run() {
       res.send(result[0]);
     });
 
+    //add tourpackage
+    app.post("/addtourpackage", async (req, res) => {
+      const result = await tourPackageCollection.insertOne(req.body);
+      res.json(result);
+    });
+
     // cofirm order
     app.post("/confirmOrder", async (req, res) => {
       const result = await tourBookingCollection.insertOne(req.body);
