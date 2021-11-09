@@ -45,6 +45,7 @@ async function run() {
     //add tourpackage
     app.post("/addtourpackage", async (req, res) => {
       const result = await tourPackageCollection.insertOne(req.body);
+      console.log(result);
       res.json(result);
     });
 
