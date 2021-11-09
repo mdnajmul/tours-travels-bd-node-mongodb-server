@@ -49,6 +49,14 @@ async function run() {
       res.json(result);
     });
 
+    // delete tour package
+    app.delete("/delteTourPackage/:id", async (req, res) => {
+      const result = await tourPackageCollection.deleteOne({
+        _id: ObjectId(req.params.id),
+      });
+      res.send(result);
+    });
+
     // cofirm order
     app.post("/confirmOrder", async (req, res) => {
       const result = await tourBookingCollection.insertOne(req.body);
