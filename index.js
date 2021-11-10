@@ -26,12 +26,20 @@ async function run() {
     const database = client.db("tours_travels_bd");
     const tourPackageCollection = database.collection("tour_packages");
     const tourBookingCollection = database.collection("orders");
+    const specialPackageCollection = database.collection("special_packages");
 
     //GET API (Fetch all tour packages from database)
     app.get("/tourpackages", async (req, res) => {
       const cursor = tourPackageCollection.find({});
       const tour_packages = await cursor.toArray();
       res.send(tour_packages);
+    });
+
+    //GET API (Fetch all special tour packages from database)
+    app.get("/specialpackages", async (req, res) => {
+      const cursor = specialPackageCollection.find({});
+      const special_packages = await cursor.toArray();
+      res.send(special_packages);
     });
 
     // get single tour package
@@ -52,6 +60,14 @@ async function run() {
     // delete tour package
     app.delete("/delteTourPackage/:id", async (req, res) => {
       const result = await tourPackageCollection.deleteOne({
+        _id: ObjectId(req.params.id),
+      });
+      res.send(result);
+    });
+
+    // delete special tour package
+    app.delete("/delteSpecialPackage/:id", async (req, res) => {
+      const result = await specialPackageCollection.deleteOne({
         _id: ObjectId(req.params.id),
       });
       res.send(result);
